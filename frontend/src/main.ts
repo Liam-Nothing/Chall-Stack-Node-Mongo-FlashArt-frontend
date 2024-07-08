@@ -4,7 +4,6 @@ import router from './router';
 import { createPinia } from 'pinia';
 import vuetify from './plugins/vuetify';
 
-// Import the CSS files directly in the main file
 import '@mdi/font/css/materialdesignicons.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
