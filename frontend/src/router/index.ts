@@ -1,14 +1,23 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import Home from '../views/Home.vue';
+import { createRouter, createWebHistory } from 'vue-router'
+import Home from '../views/Home.vue'
+import Flashes from '../views/Flashes.vue'
 
 const routes = [
-    { path: '/', name: 'Home', component: Home },
-    // Ajoute d'autres routes ici
-];
+  {
+    path: '/',
+    name: 'Home',
+    component: Home
+  },
+  {
+    path: '/flashes',
+    name: 'Flashes',
+    component: Flashes
+  }
+]
 
 const router = createRouter({
-    history: createWebHistory(import.meta.env.BASE_URL),
-    routes,
-});
+  history: createWebHistory(""),
+  routes
+})
 
-export default router;
+export default router
