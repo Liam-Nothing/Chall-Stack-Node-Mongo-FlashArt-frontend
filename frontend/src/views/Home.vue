@@ -1,24 +1,16 @@
 <template>
   <v-app>
-    <v-app-bar app color="primary" dark>
-      <v-app-bar-nav-icon class="d-md-none"></v-app-bar-nav-icon>
-      <v-toolbar-title>Flash-Art-Chall</v-toolbar-title>
-      <v-spacer></v-spacer>
-      <v-btn text class="d-none d-md-inline-flex">Home</v-btn>
-      <v-btn text class="d-none d-md-inline-flex">About</v-btn>
-      <v-btn text class="d-none d-md-inline-flex">Contact</v-btn>
-    </v-app-bar>
-
+    <Navbar />
     <v-main>
       <v-container>
         <!-- Hero Section -->
         <v-row class="hero-section">
           <v-col cols="12" md="6" class="d-flex align-center justify-center">
-            <v-img src="img/flash-simple-tatoo-pen.png" alt="Hero Image" max-width="500"></v-img>
+            <v-img src="img/flash-simple-tatoo-pen.png" alt="Hero Image" class="hero-image"></v-img>
           </v-col>
-          <v-col cols="12" md="6" class="d-flex flex-column align-left justify-center text-left">
-            <h1 class="display-1">FlashArt</h1>
-            <p class="headline">Your go-to platform to quickly book a tattoo artist for a flash tattoo.</p>
+          <v-col cols="12" md="6" class="d-flex flex-column align-center justify-center text-center">
+            <h1 class="display-1 hero-title">FlashArt</h1>
+            <p class="headline hero-slogan">Your go-to platform to quickly book a tattoo artist for a flash tattoo.</p>
           </v-col>
         </v-row>
         <v-row>
@@ -39,6 +31,7 @@
 </template>
 
 <script setup>
+import Navbar from '../components/Navbar.vue'
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 
@@ -57,5 +50,20 @@ onMounted(async () => {
 <style scoped>
 .hero-section {
   padding: 50px 0;
+}
+
+.hero-image {
+  max-width: 100%;
+}
+
+@media (max-width: 960px) {
+  .hero-image {
+    max-width: 300px;
+  }
+
+  .hero-title,
+  .hero-slogan {
+    text-align: center;
+  }
 }
 </style>
