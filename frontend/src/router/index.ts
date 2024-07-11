@@ -6,6 +6,7 @@ import Register from '../views/Register.vue'
 import ManageSlots from '../views/ManageSlots.vue'
 import ManageFlashes from '../views/ManageFlashes.vue'
 import FlashDetails from '../views/FlashDetails.vue'
+import ManageUsers from '../views/ManageUsers.vue'
 
 const routes = [
   {
@@ -45,6 +46,12 @@ const routes = [
     name: 'FlashDetails',
     component: FlashDetails
   },
+  {
+    path: '/manage-users',
+    name: 'ManageUsers',
+    component: ManageUsers,
+    meta: { requiresAuth: true, roles: ['admin'] }
+  }
 ]
 
 const router = createRouter({
