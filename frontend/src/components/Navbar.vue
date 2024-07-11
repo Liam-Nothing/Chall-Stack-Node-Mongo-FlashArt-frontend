@@ -5,10 +5,9 @@
     <v-spacer></v-spacer>
     <v-btn text class="d-none d-md-inline-flex" to="/">Home</v-btn>
     <v-btn text class="d-none d-md-inline-flex" to="/flashes">Flashes</v-btn>
-    <v-btn text class="d-none d-md-inline-flex" to="/about">About</v-btn>
-    <v-btn text class="d-none d-md-inline-flex" to="/contact">Contact</v-btn>
-    <v-btn v-if="!isAuthenticated" text class="d-none d-md-inline-flex" to="/login">Login</v-btn>
     <v-btn v-if="isAuthenticated && isTatoueurOrAdmin" text class="d-none d-md-inline-flex" to="/manage-slots">Manage Slots</v-btn>
+    <v-btn v-if="isAuthenticated && isTatoueurOrAdmin" text class="d-none d-md-inline-flex" to="/manage-flashes">Manage Flashes</v-btn>
+    <v-btn v-if="!isAuthenticated" text class="d-none d-md-inline-flex" to="/login">Login</v-btn>
     <v-btn v-if="isAuthenticated" text @click="logout">Logout</v-btn>
   </v-app-bar>
 </template>
