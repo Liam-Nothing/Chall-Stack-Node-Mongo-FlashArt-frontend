@@ -60,7 +60,9 @@ const login = async () => {
     localStorage.setItem('token', response.data.token)
     localStorage.setItem('role', response.data.role)  // Store the user's role
     isAuthenticated.value = true
-    router.push('/')
+    const redirectPath = localStorage.getItem('redirectAfterLogin') || '/'
+    localStorage.removeItem('redirectAfterLogin')
+    router.push(redirectPath)
   } catch (error) {
     console.error('Login failed:', error)
   }
