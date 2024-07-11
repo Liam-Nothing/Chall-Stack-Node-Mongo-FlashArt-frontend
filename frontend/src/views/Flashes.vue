@@ -13,14 +13,19 @@
                 <v-select
                   v-model="selectedStyle"
                   :items="styles"
+                  item-title="text"
+                  item-value="value"
                   label="Style"
                 ></v-select>
                 <v-select
                   v-model="selectedTatoueur"
                   :items="tatoueurs"
+                  item-title="text"
+                  item-value="value"
                   label="Tatoueur"
                 ></v-select>
                 <v-btn @click="applyFilters" class="mt-3" color="primary">Apply Filters</v-btn>
+                <v-btn @click="clearFilters" class="mt-3" color="secondary">Clear Filters</v-btn>
               </v-card-text>
             </v-card>
           </v-col>
@@ -62,12 +67,32 @@ const selectedStyle = ref(null)
 const selectedTatoueur = ref(null)
 const filteredFlashes = ref([])
 
-const applyFilters = () => {
-  filteredFlashes.value = flashes.value.filter(flash => {
-    const matchesStyle = selectedStyle.value ? flash.id_style.includes(selectedStyle.value) : true
-    const matchesTatoueur = selectedTatoueur.value ? flash.id_tatoueur === selectedTatoueur.value : true
-    return matchesStyle && matchesTatoueur
-  })
+const applyFilters = async () => {
+  try {
+    const response = await axios.get('http://localhost:5000/api/flashes/search', {
+      params: {
+        styleIds: selectedStyle.value,
+        tatoueurId: selectedTatoueur.value
+      },
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+    filteredFlashes.value = response.data
+  } catch (error) {
+    console.error('Error fetching filtered flashes:', error)
+  }
+}
+
+const clearFilters = async () => {
+  selectedStyle.value = null
+  selectedTatoueur.value = null
+  try {
+    const response = await axios.get('http://localhost:5000/api/flashes')
+    filteredFlashes.value = response.data
+  } catch (error) {
+    console.error('Error clearing filters:', error)
+  }
 }
 
 onMounted(async () => {
@@ -77,10 +102,16 @@ onMounted(async () => {
     filteredFlashes.value = flashResponse.data
 
     const styleResponse = await axios.get('http://localhost:5000/api/styles')
-    styles.value = styleResponse.data.map(style => ({ text: style.label, value: style._id }))
+    styles.value = styleResponse.data.map(style => ({
+      text: style.label,
+      value: style._id
+    }))
 
     const tatoueurResponse = await axios.get('http://localhost:5000/api/users?role=tatoueur')
-    tatoueurs.value = tatoueurResponse.data.map(tatoueur => ({ text: tatoueur.pseudo, value: tatoueur._id }))
+    tatoueurs.value = tatoueurResponse.data.map(tatoueur => ({
+      text: tatoueur.pseudo,
+      value: tatoueur._id
+    }))
   } catch (error) {
     console.error(error)
   }
