@@ -3,6 +3,7 @@ import Home from '../views/Home.vue'
 import Flashes from '../views/Flashes.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
+import ManageSlots from '../views/ManageSlots.vue'
 
 const routes = [
   {
@@ -24,12 +25,35 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: Register
+  },
+  {
+    path: '/manage-slots',
+    name: 'ManageSlots',
+    component: ManageSlots,
+    meta: { requiresAuth: true, roles: ['tatoueur', 'admin'] }
   }
 ]
 
 const router = createRouter({
   history: createWebHistory(""),
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  const isAuthenticated = !!localStorage.getItem('token')
+  const userRole = localStorage.getItem('role')
+  
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!isAuthenticated) {
+      next({ name: 'Login' })
+    } else if (to.matched.some(record => record.meta.roles && Array.isArray(record.meta.roles) && !record.meta.roles.includes(userRole))) {
+      next({ name: 'Home' }) // Redirect to home if user doesn't have permission
+    } else {
+      next()
+    }
+  } else {
+    next()
+  }
 })
 
 export default router
