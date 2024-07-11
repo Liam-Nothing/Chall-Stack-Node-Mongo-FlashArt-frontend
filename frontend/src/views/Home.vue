@@ -22,16 +22,13 @@
         </v-row>
       </v-container>
     </v-main>
-
-    <v-footer app color="primary" dark>
-      <v-spacer></v-spacer>
-      <span>&copy; 2024 Flash-Art-Chall</span>
-    </v-footer>
+    <Footer />
   </v-app>
 </template>
 
 <script setup>
 import Navbar from '../components/Navbar.vue'
+import Footer from '../components/Footer.vue'
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 
