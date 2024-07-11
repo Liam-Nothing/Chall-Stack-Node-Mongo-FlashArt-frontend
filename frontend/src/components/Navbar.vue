@@ -7,6 +7,7 @@
     <v-btn text class="d-none d-md-inline-flex" to="/flashes">Flashes</v-btn>
     <v-btn v-if="isAuthenticated && isTatoueurOrAdmin" text class="d-none d-md-inline-flex" to="/manage-slots">Manage Slots</v-btn>
     <v-btn v-if="isAuthenticated && isTatoueurOrAdmin" text class="d-none d-md-inline-flex" to="/manage-flashes">Manage Flashes</v-btn>
+    <v-btn v-if="isAuthenticated && userRole === 'admin'" text class="d-none d-md-inline-flex" to="/manage-users">Manage Users</v-btn>
     <v-btn v-if="!isAuthenticated" text class="d-none d-md-inline-flex" to="/login">Login</v-btn>
     <v-btn v-if="isAuthenticated" text @click="logout">Logout</v-btn>
   </v-app-bar>
@@ -18,6 +19,7 @@ import { useRouter } from 'vue-router'
 
 const isAuthenticated = ref(false)
 const isTatoueurOrAdmin = ref(false)
+const userRole = ref('')
 const router = useRouter()
 
 onMounted(() => {
@@ -25,6 +27,7 @@ onMounted(() => {
   const role = localStorage.getItem('role')
   if (token) {
     isAuthenticated.value = true
+    userRole.value = role
     isTatoueurOrAdmin.value = role === 'tatoueur' || role === 'admin'
   }
 })
@@ -34,6 +37,7 @@ const logout = () => {
   localStorage.removeItem('role')
   isAuthenticated.value = false
   isTatoueurOrAdmin.value = false
+  userRole.value = ''
   router.push('/login')
 }
 </script>
