@@ -4,6 +4,7 @@ import Flashes from '../views/Flashes.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
 import ManageSlots from '../views/ManageSlots.vue'
+import ManageFlashes from '../views/ManageFlashes.vue'
 
 const routes = [
   {
@@ -30,6 +31,12 @@ const routes = [
     path: '/manage-slots',
     name: 'ManageSlots',
     component: ManageSlots,
+    meta: { requiresAuth: true, roles: ['tatoueur', 'admin'] }
+  },
+  {
+    path: '/manage-flashes',
+    name: 'ManageFlashes',
+    component: ManageFlashes,
     meta: { requiresAuth: true, roles: ['tatoueur', 'admin'] }
   }
 ]

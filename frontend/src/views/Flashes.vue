@@ -53,7 +53,6 @@
 <script setup>
 import Navbar from '../components/Navbar.vue'
 import FlashCard from '../components/FlashCard.vue'
-import Footer from '../components/Footer.vue'
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 
