@@ -85,8 +85,10 @@
   
   <script setup>
   import Navbar from '../components/Navbar.vue'
+  import FlashCard from '../components/FlashCard.vue'
+  import Footer from '../components/Footer.vue'
   import { ref, onMounted } from 'vue'
-  import axios from 'axios'
+  import apiClient from '../plugins/axios'
   import { useRouter } from 'vue-router'
   
   const flashes = ref([])
@@ -102,11 +104,7 @@
   
   const fetchFlashes = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/flashes/my', {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      })
+      const response = await apiClient.get('/flashes/my')
       flashes.value = response.data
     } catch (error) {
       console.error('Error fetching flashes:', error)
@@ -115,11 +113,7 @@
   
   const fetchStyles = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/styles', {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      })
+      const response = await apiClient.get('/styles')
       styles.value = response.data
     } catch (error) {
       console.error('Error fetching styles:', error)
@@ -128,11 +122,7 @@
   
   const addFlash = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/api/flashes', flashData.value, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      })
+      const response = await apiClient.post('/flashes', flashData.value)
       flashes.value.push(response.data)
       showForm.value = false
       flashData.value = {
@@ -148,11 +138,7 @@
   
   const deleteFlash = async (flashId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/flashes/${flashId}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      })
+      await apiClient.delete(`/flashes/${flashId}`)
       flashes.value = flashes.value.filter(flash => flash._id !== flashId)
     } catch (error) {
       console.error('Error deleting flash:', error)
