@@ -10,5 +10,8 @@ export default defineConfig({
         additionalData: `@import "@/styles/variables.scss";`
       }
     }
+  },
+  define: {
+    'process.env': process.env
   }
 });

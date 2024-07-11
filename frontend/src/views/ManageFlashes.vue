@@ -65,8 +65,22 @@
                           <v-col cols="12" md="4">
                             <v-btn type="submit" color="primary">Add Flash</v-btn>
                           </v-col>
+                          <v-col cols="12" md="4">
+                            <v-btn color="secondary" @click="generateRandomTattoo">Generate Random Tattoo</v-btn>
+                          </v-col>
                         </v-row>
                       </v-form>
+                    </v-col>
+                  </v-row>
+                  <v-row v-if="loading">
+                    <v-col cols="12" class="text-center">
+                      <v-progress-circular indeterminate color="primary"></v-progress-circular>
+                      <p>Generating tattoo...</p>
+                    </v-col>
+                  </v-row>
+                  <v-row v-if="flashData.image">
+                    <v-col cols="12" class="text-center">
+                      <v-img :src="flashData.image" height="200px"></v-img>
                     </v-col>
                   </v-row>
                 </v-card-text>
@@ -85,9 +99,9 @@
   
   <script setup>
   import Navbar from '../components/Navbar.vue'
-  import FlashCard from '../components/FlashCard.vue'
   import Footer from '../components/Footer.vue'
   import { ref, onMounted } from 'vue'
+  import axios from 'axios'
   import apiClient from '../plugins/axios'
   import { useRouter } from 'vue-router'
   
@@ -100,6 +114,7 @@
     image: '',
     id_style: []
   })
+  const loading = ref(false)
   const router = useRouter()
   
   const fetchFlashes = async () => {
@@ -142,6 +157,28 @@
       flashes.value = flashes.value.filter(flash => flash._id !== flashId)
     } catch (error) {
       console.error('Error deleting flash:', error)
+    }
+  }
+  
+  const generateRandomTattoo = async () => {
+    loading.value = true
+    try {
+      const response = await axios.post('https://api.openai.com/v1/images/generations', {
+        model: 'dall-e-3',
+        prompt: 'black and white vectorize tattoo',
+        n: 1,
+        size: '1024x1024'
+      }, {
+        headers: {
+          Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      })
+      flashData.value.image = response.data.data[0].url
+    } catch (error) {
+      console.error('Error generating tattoo:', error)
+    } finally {
+      loading.value = false
     }
   }
   
