@@ -8,11 +8,10 @@
             <v-card>
               <v-card-title>Login</v-card-title>
               <v-card-text>
-                <v-form @submit.prevent="login">
+                <v-form @submit.prevent="handleLogin">
                   <v-text-field
                     v-model="email"
                     label="Email"
-                    type="email"
                     required
                   ></v-text-field>
                   <v-text-field
@@ -21,73 +20,45 @@
                     type="password"
                     required
                   ></v-text-field>
-                  <v-btn type="submit" color="primary" class="mt-3">Login</v-btn>
+                  <v-btn type="submit" color="primary">Login</v-btn>
                 </v-form>
               </v-card-text>
-              <v-card-actions>
-                <v-btn text @click="goToRegister">Don't have an account? Register</v-btn>
-              </v-card-actions>
             </v-card>
           </v-col>
         </v-row>
       </v-container>
     </v-main>
-
-    <v-footer app color="primary" dark>
-      <v-spacer></v-spacer>
-      <span>&copy; 2024 Flash-Art-Chall</span>
-    </v-footer>
+    <Footer />
   </v-app>
 </template>
 
 <script setup>
-import Navbar from '../components/Navbar.vue'
 import { ref } from 'vue'
-import axios from 'axios'
 import { useRouter } from 'vue-router'
+import apiClient from '../plugins/axios'
 
 const email = ref('')
 const password = ref('')
 const router = useRouter()
-const isAuthenticated = ref(false)
 
-const login = async () => {
+const handleLogin = async () => {
   try {
-    const response = await axios.post('http://localhost:5000/api/auth/login', {
-      email: email.value,
-      password: password.value
-    })
+    const response = await apiClient.post('/auth/login', { email: email.value, password: password.value })
     localStorage.setItem('token', response.data.token)
-    localStorage.setItem('role', response.data.role)  // Store the user's role
-    isAuthenticated.value = true
-    router.push('/')
+    localStorage.setItem('role', response.data.role)
+    
+    const redirectUrl = localStorage.getItem('redirectAfterLogin')
+    if (redirectUrl) {
+      localStorage.removeItem('redirectAfterLogin')
+      router.push(redirectUrl)
+    } else {
+      router.push('/')
+    }
   } catch (error) {
-    console.error('Login failed:', error)
+    console.error('Error logging in:', error)
   }
-}
-
-const goToRegister = () => {
-  router.push('/register')
 }
 </script>
 
 <style scoped>
-.hero-section {
-  padding: 50px 0;
-}
-
-.hero-image {
-  max-width: 100%;
-}
-
-@media (max-width: 960px) {
-  .hero-image {
-    max-width: 300px;
-  }
-
-  .hero-title,
-  .hero-slogan {
-    text-align: center;
-  }
-}
 </style>
