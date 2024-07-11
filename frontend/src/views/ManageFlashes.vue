@@ -55,7 +55,7 @@
                             <v-select
                               v-model="flashData.id_style"
                               :items="styles"
-                              item-text="label"
+                              item-title="label"
                               item-value="_id"
                               label="Style"
                               multiple

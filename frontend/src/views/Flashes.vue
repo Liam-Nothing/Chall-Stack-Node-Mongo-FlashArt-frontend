@@ -53,8 +53,9 @@
 <script setup>
 import Navbar from '../components/Navbar.vue'
 import FlashCard from '../components/FlashCard.vue'
+import Footer from '../components/Footer.vue'
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
+import apiClient from '../plugins/axios'
 
 const flashes = ref([])
 const styles = ref([])
@@ -65,13 +66,10 @@ const filteredFlashes = ref([])
 
 const applyFilters = async () => {
   try {
-    const response = await axios.get('http://localhost:5000/api/flashes/search', {
+    const response = await apiClient.get('/flashes/search', {
       params: {
         styleIds: selectedStyle.value,
         tatoueurId: selectedTatoueur.value
-      },
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`
       }
     })
     filteredFlashes.value = response.data
@@ -84,7 +82,7 @@ const clearFilters = async () => {
   selectedStyle.value = null
   selectedTatoueur.value = null
   try {
-    const response = await axios.get('http://localhost:5000/api/flashes')
+    const response = await apiClient.get('/flashes')
     filteredFlashes.value = response.data
   } catch (error) {
     console.error('Error clearing filters:', error)
@@ -93,17 +91,17 @@ const clearFilters = async () => {
 
 onMounted(async () => {
   try {
-    const flashResponse = await axios.get('http://localhost:5000/api/flashes')
+    const flashResponse = await apiClient.get('/flashes')
     flashes.value = flashResponse.data
     filteredFlashes.value = flashResponse.data
 
-    const styleResponse = await axios.get('http://localhost:5000/api/styles')
+    const styleResponse = await apiClient.get('/styles')
     styles.value = styleResponse.data.map(style => ({
       text: style.label,
       value: style._id
     }))
 
-    const tatoueurResponse = await axios.get('http://localhost:5000/api/users?role=tatoueur')
+    const tatoueurResponse = await apiClient.get('/users', { params: { role: 'tatoueur' } })
     tatoueurs.value = tatoueurResponse.data.map(tatoueur => ({
       text: tatoueur.pseudo,
       value: tatoueur._id
