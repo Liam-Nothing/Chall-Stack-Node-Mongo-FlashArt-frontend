@@ -6,9 +6,14 @@
           <v-row justify="center">
             <v-col cols="12" md="6">
               <v-card>
-                <v-card-title>Login</v-card-title>
+                <v-card-title>Register</v-card-title>
                 <v-card-text>
-                  <v-form @submit.prevent="login">
+                  <v-form @submit.prevent="register">
+                    <v-text-field
+                      v-model="pseudo"
+                      label="Pseudo"
+                      required
+                    ></v-text-field>
                     <v-text-field
                       v-model="email"
                       label="Email"
@@ -21,11 +26,11 @@
                       type="password"
                       required
                     ></v-text-field>
-                    <v-btn type="submit" color="primary" class="mt-3">Login</v-btn>
+                    <v-btn type="submit" color="primary" class="mt-3">Register</v-btn>
                   </v-form>
                 </v-card-text>
                 <v-card-actions>
-                  <v-btn text @click="goToRegister">Don't have an account? Register</v-btn>
+                  <v-btn text @click="goToLogin">Already have an account? Login</v-btn>
                 </v-card-actions>
               </v-card>
             </v-col>
@@ -46,27 +51,27 @@
   import axios from 'axios'
   import { useRouter } from 'vue-router'
   
+  const pseudo = ref('')
   const email = ref('')
   const password = ref('')
   const router = useRouter()
-  const isAuthenticated = ref(false)
   
-  const login = async () => {
+  const register = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', {
+      const response = await axios.post('http://localhost:5000/api/auth/register', {
+        pseudo: pseudo.value,
         email: email.value,
         password: password.value
       })
       localStorage.setItem('token', response.data.token)
-      isAuthenticated.value = true
       router.push('/')
     } catch (error) {
-      console.error('Login failed:', error)
+      console.error('Registration failed:', error)
     }
   }
   
-  const goToRegister = () => {
-    router.push('/register')
+  const goToLogin = () => {
+    router.push('/login')
   }
   </script>
   
