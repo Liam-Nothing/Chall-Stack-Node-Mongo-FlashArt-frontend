@@ -60,6 +60,8 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  document.title = 'Flash-Art-Chall';
+
   const isAuthenticated = !!localStorage.getItem('token')
   const userRole = localStorage.getItem('role')
   
