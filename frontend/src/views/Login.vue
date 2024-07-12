@@ -45,11 +45,13 @@ import Navbar from '../components/Navbar.vue'
 import { ref } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
+import { useToast } from 'vue-toastification'
 
 const email = ref('')
 const password = ref('')
 const router = useRouter()
 const isAuthenticated = ref(false)
+const toast = useToast()
 
 const login = async () => {
   try {
@@ -65,6 +67,7 @@ const login = async () => {
     router.push(redirectPath)
   } catch (error) {
     console.error('Login failed:', error)
+    toast.error(error.response.data.error || 'An error occurred')
   }
 }
 
