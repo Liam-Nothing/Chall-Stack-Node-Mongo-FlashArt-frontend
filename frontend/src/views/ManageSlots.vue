@@ -83,6 +83,8 @@ import Navbar from '../components/Navbar.vue'
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
+import { useToast } from 'vue-toastification'
+const toast = useToast()
 
 const slots = ref([])
 const showForm = ref(false)
@@ -100,6 +102,7 @@ const fetchSlots = async () => {
     slots.value = response.data
   } catch (error) {
     console.error('Error fetching slots:', error)
+    toast.error(error.response.data.error || 'An error occurred')
   }
 }
 
@@ -128,6 +131,7 @@ const addSlot = async () => {
     showForm.value = false
   } catch (error) {
     console.error('Error adding slot:', error)
+    toast.error(error.response.data.error || 'An error occurred')
   }
 }
 
@@ -146,6 +150,7 @@ const toggleAvailability = async (slot) => {
     }
   } catch (error) {
     console.error('Error toggling availability:', error)
+    toast.error(error.response.data.error || 'An error occurred')
   }
 }
 
@@ -159,6 +164,7 @@ const deleteSlot = async (slotId) => {
     slots.value = slots.value.filter(slot => slot._id !== slotId)
   } catch (error) {
     console.error('Error deleting slot:', error)
+    toast.error(error.response.data.error || 'An error occurred')
   }
 }
 

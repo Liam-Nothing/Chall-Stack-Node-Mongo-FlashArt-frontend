@@ -16,6 +16,8 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useToast } from 'vue-toastification'
+const toast = useToast()
 
 const isAuthenticated = ref(false)
 const isTatoueurOrAdmin = ref(false)
@@ -39,6 +41,7 @@ const logout = () => {
   isTatoueurOrAdmin.value = false
   userRole.value = ''
   router.push('/login')
+  toast.success('You have been logged out')
 }
 </script>
 
