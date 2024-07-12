@@ -48,12 +48,14 @@ import { useRoute, useRouter } from 'vue-router'
 import axios from 'axios'
 import Navbar from '../components/Navbar.vue'
 import Footer from '../components/Footer.vue'
+import { useToast } from 'vue-toastification'
 
 const route = useRoute()
 const router = useRouter()
 const flash = ref(null)
 const slots = ref([])
 const showSlots = ref(false)
+const toast = useToast()
 
 const fetchFlash = async () => {
   try {
@@ -61,6 +63,7 @@ const fetchFlash = async () => {
     flash.value = response.data
   } catch (error) {
     console.error('Error fetching flash details:', error)
+    toast.error(error.response.data.error || 'An error occurred')
   }
 }
 
@@ -87,6 +90,7 @@ const fetchSlots = async () => {
     slots.value = response.data
   } catch (error) {
     console.error('Error fetching slots:', error)
+    toast.error(error.response.data.error || 'An error occurred')
   }
 }
 
@@ -98,10 +102,11 @@ const bookSlot = async (slot) => {
         Authorization: `Bearer ${token}`
       }
     })
-    console.log('Slot booked:', response.data)
-    // Optionally, you can update the slots list here to reflect the booking
+    router.push('/flashes')
+    toast.success('You will receive an email confirmation shortly.')
   } catch (error) {
     console.error('Error booking slot:', error)
+    toast.error(error.response.data.error || 'An error occurred')
   }
 }
 

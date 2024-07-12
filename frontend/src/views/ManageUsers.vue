@@ -70,6 +70,8 @@
   import axios from 'axios'
   import Navbar from '../components/Navbar.vue'
   import Footer from '../components/Footer.vue'
+import { useToast } from 'vue-toastification'
+const toast = useToast()
   
   const users = ref([])
   const dialog = ref(false)
@@ -95,6 +97,7 @@
       users.value = response.data
     } catch (error) {
       console.error('Error fetching users:', error)
+      toast.error(error.response.data.error || 'An error occurred')
     }
   }
   
@@ -114,6 +117,7 @@
       dialog.value = false
     } catch (error) {
       console.error('Error saving user:', error)
+      toast.error(error.response.data.error || 'An error occurred')
     }
   }
   
@@ -127,6 +131,7 @@
       fetchUsers()
     } catch (error) {
       console.error('Error deleting user:', error)
+      toast.error(error.response.data.error || 'An error occurred')
     }
   }
   

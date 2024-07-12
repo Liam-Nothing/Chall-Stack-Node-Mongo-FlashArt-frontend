@@ -104,6 +104,8 @@
   import axios from 'axios'
   import apiClient from '../plugins/axios'
   import { useRouter } from 'vue-router'
+import { useToast } from 'vue-toastification'
+const toast = useToast()
   
   const flashes = ref([])
   const styles = ref([])
@@ -123,6 +125,7 @@
       flashes.value = response.data
     } catch (error) {
       console.error('Error fetching flashes:', error)
+      toast.error(error.response.data.error || 'An error occurred')
     }
   }
   
@@ -132,6 +135,7 @@
       styles.value = response.data
     } catch (error) {
       console.error('Error fetching styles:', error)
+      toast.error(error.response.data.error || 'An error occurred')
     }
   }
   
@@ -148,6 +152,7 @@
       }
     } catch (error) {
       console.error('Error adding flash:', error)
+      toast.error(error.response.data.error || 'An error occurred')
     }
   }
   
@@ -157,6 +162,7 @@
       flashes.value = flashes.value.filter(flash => flash._id !== flashId)
     } catch (error) {
       console.error('Error deleting flash:', error)
+      toast.error(error.response.data.error || 'An error occurred')
     }
   }
   
@@ -177,6 +183,7 @@
       flashData.value.image = response.data.data[0].url
     } catch (error) {
       console.error('Error generating tattoo:', error)
+      toast.error(error.response.data.error || 'An error occurred')
     } finally {
       loading.value = false
     }

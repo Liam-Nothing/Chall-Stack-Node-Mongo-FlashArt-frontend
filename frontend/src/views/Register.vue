@@ -50,6 +50,8 @@ import Navbar from '../components/Navbar.vue'
 import { ref } from 'vue'
 import axios from 'axios'
 import { useRouter } from 'vue-router'
+import { useToast } from 'vue-toastification'
+const toast = useToast()
 
 const pseudo = ref('')
 const email = ref('')
@@ -68,6 +70,7 @@ const register = async () => {
     router.push('/')
   } catch (error) {
     console.error('Registration failed:', error)
+    toast.error(error.response.data.error || 'An error occurred')
   }
 }
 

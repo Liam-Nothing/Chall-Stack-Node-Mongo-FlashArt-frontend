@@ -56,6 +56,8 @@ import FlashCard from '../components/FlashCard.vue'
 import Footer from '../components/Footer.vue'
 import { ref, onMounted } from 'vue'
 import apiClient from '../plugins/axios'
+import { useToast } from 'vue-toastification'
+const toast = useToast()
 
 const flashes = ref([])
 const styles = ref([])
@@ -75,6 +77,7 @@ const applyFilters = async () => {
     filteredFlashes.value = response.data
   } catch (error) {
     console.error('Error fetching filtered flashes:', error)
+    toast.error(error.response.data.error || 'An error occurred')
   }
 }
 
@@ -86,6 +89,7 @@ const clearFilters = async () => {
     filteredFlashes.value = response.data
   } catch (error) {
     console.error('Error clearing filters:', error)
+    toast.error(error.response.data.error || 'An error occurred')
   }
 }
 
@@ -108,6 +112,7 @@ onMounted(async () => {
     }))
   } catch (error) {
     console.error(error)
+    toast.error(error.response.data.error || 'An error occurred')
   }
 })
 </script>
